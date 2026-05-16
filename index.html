@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبارات التجويد - هدي المجيد</title>
+    <title>اختبار التجويد - هدي المجيد</title>
     <!-- استدعاء خط تجوال للنص العادي وخط أميري للقرآن الكريم -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
     <!-- مكتبة تصدير PDF -->
@@ -54,7 +54,7 @@
                 <img src="https://www.quranasir.edu.sa/rafed/uploads/system/project_637b3f889a105.jpg" alt="شعار جمعية تذكرة" class="h-16 md:h-20 w-auto object-contain">
             </div>
             <div class="text-center">
-                <h1 class="text-3xl md:text-4xl font-extrabold mb-1">اختبارات التجويد</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-1">اختبار التجويد</h1>
                 <p class="text-teal-100 text-lg">من كتاب هدي المجيد في أحكام التجويد</p>
             </div>
         </div>
@@ -98,7 +98,7 @@
                 </div>
 
                 <div class="text-center pt-6 pb-10">
-                    <button type="button" onclick="showConfirmSubmit()" class="bg-primary hover:bg-teal-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition transform hover:scale-105 text-lg">تسليم الإجابات</button>
+                    <button type="button" onclick="showConfirmSubmit()" class="bg-primary hover:bg-teal-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition transform hover:scale-105 text-lg">إنهاء وتصحيح الإجابات</button>
                 </div>
             </form>
         </div>
@@ -107,10 +107,10 @@
         <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-[60] p-4">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center border-t-4 border-primary">
                 <div class="text-4xl mb-4">📤</div>
-                <h3 class="text-xl font-bold text-primary mb-4">تأكيد التسليم</h3>
-                <p class="text-gray-600 mb-6 leading-relaxed">هل أنتِ متأكدة من رغبتكِ في تسليم الإجابات الآن؟</p>
+                <h3 class="text-xl font-bold text-primary mb-4">تأكيد الإنهاء</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">هل أنتِ متأكدة من رغبتكِ في إنهاء الاختبار وتصحيح الإجابات؟</p>
                 <div class="flex gap-2">
-                    <button id="final-submit-btn" onclick="window.confirmAndProcessSubmission()" class="flex-1 bg-primary text-white py-2 rounded-lg font-bold transition hover:bg-teal-700">نعم، تسليم</button>
+                    <button id="final-submit-btn" onclick="window.confirmAndProcessSubmission()" class="flex-1 bg-primary text-white py-2 rounded-lg font-bold transition hover:bg-teal-700">نعم، متأكدة</button>
                     <button onclick="window.hideConfirmSubmit()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-bold transition hover:bg-gray-300">إلغاء</button>
                 </div>
             </div>
@@ -118,7 +118,7 @@
 
         <!-- شاشة النتيجة -->
         <div id="result-screen" class="hidden bg-white rounded-2xl shadow-lg p-6 md:p-10 max-w-2xl mx-auto border-t-4 border-primary text-center">
-            <h2 class="text-3xl font-bold text-primary mb-4">تم تسليم إجابتكِ! 🎉</h2>
+            <h2 class="text-3xl font-bold text-primary mb-4">أحسنتِ إتمام الاختبار! 🎉</h2>
             <p class="text-lg text-gray-700 mb-2">الطالبة: <span id="result-name" class="font-bold text-primary"></span></p>
             <div class="my-6 bg-teal-50 p-6 rounded-xl inline-block border border-teal-100">
                 <p class="text-gray-600 font-semibold mb-2">النتيجة المبدئية للأسئلة الموضوعية</p>
@@ -126,57 +126,43 @@
                 <p class="text-sm text-teal-700 mt-2">* درجة الأسئلة المقالية تُضاف لاحقاً من المعلمة</p>
             </div>
             
-            <div id="action-buttons-container" class="space-y-4 mt-8 text-center"></div>
+            <div class="bg-amber-50 border-r-4 border-amber-500 p-4 text-right mb-6 rounded">
+                <p class="text-amber-800 font-bold mb-2">⚠️ خطوة أخيرة هامة جداً:</p>
+                <p class="text-sm text-amber-700">لكي يتم اعتماد درجتكِ، يجب عليكِ إرسال النتيجة إلى المعلمة بالضغط على أحد الأزرار التالية:</p>
+            </div>
+
+            <div id="action-buttons-container" class="space-y-3 mt-4 flex flex-col items-center">
+                <button onclick="window.sendWhatsApp()" class="w-full sm:w-3/4 bg-green-500 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-600 transition flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    إرسال النتيجة عبر الواتساب
+                </button>
+                <button onclick="window.sendEmail()" class="w-full sm:w-3/4 bg-primary text-white font-bold py-3 rounded-xl shadow hover:bg-teal-700 transition">
+                    📧 إرسال النتيجة عبر الإيميل
+                </button>
+                <button onclick="window.copyToClipboard()" class="w-full sm:w-3/4 bg-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-300 transition">
+                    📋 نسخ التقرير كاملاً
+                </button>
+                <p id="copy-status" class="text-green-600 font-bold hidden text-sm">تم نسخ التقرير! يمكنك لصقه للمعلمة.</p>
+            </div>
+
+            <button onclick="window.viewDetailsLocally()" class="mt-8 text-teal-600 underline font-bold hover:text-teal-800 text-sm">
+                عرض تقرير إجاباتي بالتفصيل (أو تنزيله PDF)
+            </button>
             
-            <button onclick="window.exitToHome()" class="mt-8 w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-black transition transform hover:scale-105">
-                الخروج والعودة للرئيسية
+            <hr class="my-6 border-gray-200">
+            <button onclick="window.exitToHome()" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-black transition">
+                الخروج من الاختبار
             </button>
         </div>
 
-        <!-- لوحة تحكم المعلمة -->
-        <div id="teacher-screen" class="hidden bg-white rounded-2xl shadow-lg p-6 md:p-10 max-w-4xl mx-auto border-t-4 border-secondary">
-            <div class="flex justify-between items-center mb-6 border-b pb-4">
-                <h2 class="text-2xl font-bold text-primary flex items-center gap-2">📊 لوحة نتائج الطالبات</h2>
-                <button onclick="window.closeTeacherDashboard()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold text-sm transition">خروج</button>
-            </div>
-            <div id="teacher-status" class="text-center text-gray-500 py-8 font-semibold italic">جاري جلب النتائج...</div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-right border-collapse hidden" id="submissions-table">
-                    <thead>
-                        <tr class="bg-teal-50 text-teal-800 border-b-2 border-teal-200 text-sm">
-                            <th class="p-3">الطالبة</th>
-                            <th class="p-3">الدرجة</th>
-                            <th class="p-3">التاريخ</th>
-                            <th class="p-3 text-center">عرض</th>
-                        </tr>
-                    </thead>
-                    <tbody id="submissions-list"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- نافذة تسجيل دخول المعلمة -->
-        <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-[70] p-4">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center border-t-4 border-primary">
-                <div class="text-3xl mb-4">🛡️</div>
-                <h3 class="text-xl font-bold text-primary mb-4">منطقة مخصصة</h3>
-                <input type="password" id="teacher-pass" class="w-full px-4 py-3 border rounded-lg mb-4 text-center focus:ring-2 focus:ring-primary outline-none" placeholder="كلمة المرور">
-                <div id="login-error" class="text-red-500 text-sm mb-4 hidden font-bold">كلمة المرور غير صحيحة!</div>
-                <div class="flex gap-2">
-                    <button onclick="window.checkTeacherPassword()" class="flex-1 bg-primary text-white py-2 rounded-lg font-bold transition hover:bg-teal-700">دخول</button>
-                    <button onclick="window.hideTeacherLogin()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-bold transition hover:bg-gray-300">إلغاء</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- نافذة التفاصيل -->
+        <!-- نافذة التفاصيل (تعرض للطالبة تقريرها قبل الإرسال لتنزيله PDF) -->
         <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex-col items-center justify-center z-50 p-4">
             <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]">
                 <div class="p-4 border-b flex justify-between items-center bg-primary text-white rounded-t-xl">
-                    <h3 class="font-bold text-lg">تفاصيل إجابات الطالبة</h3>
+                    <h3 class="font-bold text-lg">تفاصيل إجاباتك</h3>
                     <div class="flex items-center gap-4">
                         <button id="export-btn" onclick="window.exportToPDF()" class="bg-white text-primary px-3 py-1.5 rounded text-sm font-bold shadow hover:bg-teal-50 transition flex items-center gap-1">
-                            <span>تصدير PDF 📥</span>
+                            <span>تنزيل PDF 📥</span>
                         </button>
                         <button onclick="window.closeDetailsModal()" class="text-2xl font-bold hover:text-gray-200 transition">&times;</button>
                     </div>
@@ -187,41 +173,20 @@
 
     </main>
 
-    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-xs relative select-none">
-        <p>حقوق الطبع محفوظة لجمعية تذكرة لتحفيظ القرآن بعسير <span onclick="window.showTeacherLogin()" class="cursor-default hover:text-gray-300 transition-colors duration-500">🌸</span></p>
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-xs relative select-none">
+        <p>حقوق الطبع محفوظة لجمعية تذكرة لتحفيظ القرآن بعسير 🌸</p>
     </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script>
+        // ==========================================
+        // إعدادات الإرسال للمعلمة مريم
+        // ==========================================
+        const TEACHER_EMAIL = "Maryamalshnini@gmail.com"; 
+        const TEACHER_WHATSAPP = "966502581522"; 
 
-        let db, auth, appId;
-        let currentUser = null;
-        let authPromise = null;
-        const isFirebaseAvailable = typeof __firebase_config !== 'undefined';
-        
-        if (isFirebaseAvailable) {
-            try {
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const APP_COMPLETION_KEY = "has_taken_tajweed_quiz_final_v6";
 
-                authPromise = (async () => {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        return await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        return await signInAnonymously(auth);
-                    }
-                })();
-
-                onAuthStateChanged(auth, (user) => { currentUser = user; });
-            } catch (e) { console.error("Firebase Error", e); }
-        }
-
-        // --- بنك الأسئلة مع إضافة الإجابات النموذجية للأسئلة المقالية ليظهر للمعلمة ---
+        // --- بنك الأسئلة ---
         const questionBank = {
             tf: [
                 { q: "التنوين هو النون الخالية من الحركة ثابتة وصلا ووقفا وخطا ولفظا.", a: "خطأ" },
@@ -250,7 +215,7 @@
                 { q: "اللسان فيه عشرة مخارج خاصة لثمانية عشر حرفا.", a: "صح" },
                 { q: "المذهب المعمول به عندنا في عدد مخارج الحروف هو مذهب ابن الجزري.", a: "صح" }
             ],
-            mcq: [], // لا يوجد في الملف
+            mcq: [],
             fill: [
                 { q: "اتجاه ضغط الحرف عند النطق به إلى الحنك الأسفل هذا تعريف ____.", a: ["الاستفال"] },
                 { q: "تنقسم الحروف من حيث التفخيم والترقيق إلى: ____ و ____ و ____.", a: ["مفخمة", "مرققة", "مرققة أحيانا ومفخمة أحيانا", "مرققه", "مفخمه"] },
@@ -314,12 +279,8 @@
             ]
         };
 
-        const TEACHER_EMAIL = "kmasskmass@gmail.com";
-        const APP_COMPLETION_KEY = "has_taken_tajweed_quiz_final_v3";
-
         let currentStudent = "", selectedQuestions = [], finalScore = 0, totalObjectivePoints = 0, reportData = "";
 
-        // التحقق عند تحميل الصفحة
         window.addEventListener('load', () => {
             if (localStorage.getItem(APP_COMPLETION_KEY)) {
                 showTakenScreen();
@@ -365,7 +326,6 @@
             selectedQuestions = [];
             const getRandom = (arr, count) => [...arr].sort(() => 0.5 - Math.random()).slice(0, count);
             
-            // تحديد عدد الأسئلة التي ستظهر للطالبة (عشوائياً من البنك)
             const tfQs = getRandom(questionBank.tf, 10); 
             const mcqQs = getRandom(questionBank.mcq, 0); 
             const fillQs = getRandom(questionBank.fill, 10); 
@@ -449,15 +409,12 @@
             modal.classList.add('hidden'); modal.classList.remove('flex');
         };
 
-        window.confirmAndProcessSubmission = async () => {
-            const btn = document.getElementById('final-submit-btn');
-            btn.disabled = true;
-            btn.innerText = "جاري الحفظ...";
+        window.confirmAndProcessSubmission = () => {
             window.hideConfirmSubmit();
-            await processSubmission();
+            processSubmission();
         };
 
-        async function processSubmission() {
+        function processSubmission() {
             finalScore = 0; totalObjectivePoints = 0;
             reportData = `اسم الطالبة: ${currentStudent}\nتاريخ التسليم: ${new Date().toLocaleString('ar-SA')}\n------------------\n`;
             const formData = new FormData(document.getElementById('quiz-form'));
@@ -475,7 +432,6 @@
                         let correctAnswersText = "";
 
                         if(item.obj.a && Array.isArray(item.obj.a)) {
-                            // تجميع الإجابات المحتملة لعرضها للمعلمة
                             correctAnswersText = item.obj.a.join(' أو ');
                             isCorrect = item.obj.a.some(correctVal => 
                                 userAns.replace(/\s/g,'') === correctVal.replace(/\s/g,'') || 
@@ -494,7 +450,6 @@
                     if (ans === item.obj.a) finalScore++;
                 } else {
                     let ans = (formData.get(item.id) || "لم تُجب").trim();
-                    // عرض إجابة الطالبة وإجابة المعلمة للتقييم
                     reportData += `إجابتكِ:\n${ans}\n\n>> الإجابة النموذجية (لتقييم المعلمة):\n${item.obj.a}\n`;
                 }
                 reportData += `\n`;
@@ -502,31 +457,7 @@
 
             reportData += `------------------\nالدرجة الآلية (للأسئلة الموضوعية فقط): ${finalScore} من ${totalObjectivePoints}`;
 
-            let saved = false;
-            if (isFirebaseAvailable && db) {
-                try {
-                    if (authPromise) await authPromise;
-                    if (currentUser) {
-                        const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'submissions');
-                        await addDoc(colRef, {
-                            studentName: currentStudent,
-                            score: finalScore,
-                            total: totalObjectivePoints,
-                            reportData: reportData,
-                            timestamp: new Date().toISOString()
-                        });
-                        saved = true;
-                        localStorage.setItem(APP_COMPLETION_KEY, "true");
-                    }
-                } catch (e) { console.error("Cloud Save Failed", e); }
-            }
-
-            const actionContainer = document.getElementById('action-buttons-container');
-            if (saved) {
-                actionContainer.innerHTML = `<div class="bg-green-100 border border-green-300 text-green-700 font-bold py-5 rounded-xl text-center">✅ تم حفظ النتيجة بنجاح وإرسالها للمعلمة!</div>`;
-            } else {
-                actionContainer.innerHTML = `<button onclick="window.sendEmail()" class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg">📧 إرسال النتيجة بالبريد (فشل الحفظ التلقائي)</button>`;
-            }
+            localStorage.setItem(APP_COMPLETION_KEY, "true");
 
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
@@ -535,98 +466,39 @@
             window.scrollTo(0,0);
         }
 
-        window.exitToHome = () => {
-            document.getElementById('result-screen').classList.add('hidden');
-            if (localStorage.getItem(APP_COMPLETION_KEY)) {
-                showTakenScreen();
-            } else {
-                document.getElementById('welcome-screen').classList.remove('hidden');
-                document.getElementById('student-name').value = '';
-            }
-            window.scrollTo(0,0);
+        window.sendWhatsApp = () => {
+            const text = encodeURIComponent("السلام عليكم، هذا تقرير اختبار التجويد الخاص بي:\n\n" + reportData);
+            window.open(`https://wa.me/${TEACHER_WHATSAPP}?text=${text}`, '_blank');
         };
 
         window.sendEmail = () => {
-            const body = `الطالبة: ${currentStudent}\nالدرجة المبدئية: ${finalScore}/${totalObjectivePoints}\n\nيرجى مراجعة التفاصيل في لوحة التحكم للتقييم النهائي.`;
+            const body = `السلام عليكم، هذا تقرير اختبار التجويد الخاص بي:\n\n${reportData}`;
             window.location.href = `mailto:${TEACHER_EMAIL}?subject=${encodeURIComponent("نتيجة اختبار التجويد: "+currentStudent)}&body=${encodeURIComponent(body)}`;
         };
 
-        window.showTeacherLogin = () => {
-            const modal = document.getElementById('login-modal');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            document.getElementById('teacher-pass').value = '';
-            document.getElementById('login-error').classList.add('hidden');
-            document.getElementById('teacher-pass').focus();
+        window.copyToClipboard = () => {
+            const el = document.createElement('textarea');
+            el.value = reportData; 
+            document.body.appendChild(el);
+            el.select(); 
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            document.getElementById('copy-status').classList.remove('hidden');
+            setTimeout(() => document.getElementById('copy-status').classList.add('hidden'), 3000);
         };
 
-        window.hideTeacherLogin = () => {
-            const modal = document.getElementById('login-modal');
-            modal.classList.add('hidden'); modal.classList.remove('flex');
+        window.exitToHome = () => {
+            document.getElementById('result-screen').classList.add('hidden');
+            showTakenScreen();
+            window.scrollTo(0,0);
         };
 
-        window.checkTeacherPassword = () => {
-            if (document.getElementById('teacher-pass').value === "8780") {
-                window.hideTeacherLogin();
-                document.getElementById('welcome-screen').classList.add('hidden');
-                document.getElementById('quiz-screen').classList.add('hidden');
-                document.getElementById('result-screen').classList.add('hidden');
-                document.getElementById('already-taken-screen').classList.add('hidden');
-                document.getElementById('teacher-screen').classList.remove('hidden');
-                loadData();
-            } else {
-                document.getElementById('login-error').classList.remove('hidden');
-            }
-        };
-
-        window.closeTeacherDashboard = () => {
-            if (unsubscribe) unsubscribe();
-            document.getElementById('teacher-screen').classList.add('hidden');
-            if (localStorage.getItem(APP_COMPLETION_KEY)) {
-                showTakenScreen();
-            } else {
-                document.getElementById('welcome-screen').classList.remove('hidden');
-            }
-        };
-
-        let unsubscribe = null;
-        async function loadData() {
-            const status = document.getElementById('teacher-status');
-            const table = document.getElementById('submissions-table');
-            const list = document.getElementById('submissions-list');
-            if (isFirebaseAvailable && authPromise) await authPromise;
-            
-            unsubscribe = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'submissions'), 
-                (snap) => {
-                    list.innerHTML = '';
-                    if(snap.empty) { status.innerText = "لا توجد نتائج."; table.classList.add('hidden'); return; }
-                    status.classList.add('hidden'); table.classList.remove('hidden');
-                    const docs = [];
-                    snap.forEach(d => docs.push(d.data()));
-                    docs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    docs.forEach(d => {
-                        const tr = document.createElement('tr');
-                        tr.className = "border-b hover:bg-gray-50 transition text-sm";
-                        tr.innerHTML = `
-                            <td class="p-3 font-semibold text-right">${d.studentName}</td>
-                            <td class="p-3 text-secondary font-bold text-right">${d.score}/${d.total}</td>
-                            <td class="p-3 text-xs text-gray-500 text-right font-mono" dir="ltr">${new Date(d.timestamp).toLocaleString('ar-EG')}</td>
-                            <td class="p-3 text-center"><button onclick="window.viewDetails('${encodeURIComponent(d.reportData)}')" class="bg-teal-600 text-white px-2 py-1 rounded text-xs font-bold transition hover:bg-teal-700">عرض</button></td>
-                        `;
-                        list.appendChild(tr);
-                    });
-                }, (err) => { status.innerText = "خطأ في الصلاحيات."; }
-            );
-        }
-
-        window.viewDetails = (data) => {
-            const decodedData = decodeURIComponent(data);
-            
-            // تحويل النص الخام إلى قالب HTML جميل للطباعة
+        window.viewDetailsLocally = () => {
             let formattedHTML = `<div class="text-center mb-6 border-b-2 border-primary pb-4">
                                     <h2 class="text-2xl font-bold text-primary mt-2">تقرير نتيجة اختبار التجويد</h2>
                                  </div>`;
             
-            const lines = decodedData.split('\n');
+            const lines = reportData.split('\n');
             lines.forEach(line => {
                 if (!line.trim() && !line.includes('---')) return;
 
@@ -638,10 +510,6 @@
                     formattedHTML += `<hr class="my-4 border-teal-200">`;
                 } else if (line.startsWith('س')) {
                     formattedHTML += `<div class="bg-teal-100 p-3 rounded-lg mt-5 mb-2 border border-teal-200"><h4 class="font-bold text-teal-900">${line}</h4></div>`;
-                } else if (line.includes('✅')) {
-                    formattedHTML += `<p class="text-green-700 font-bold px-3 mt-1"> ${line}</p>`;
-                } else if (line.includes('❌')) {
-                    formattedHTML += `<p class="text-red-700 font-bold px-3 mt-1"> ${line}</p>`;
                 } else if (line.startsWith('الدرجة الآلية')) {
                     formattedHTML += `<div class="bg-primary text-white p-4 rounded-xl text-center text-xl font-bold mt-8 mb-2 mx-2 shadow-md">${line}</div>`;
                 } else if (line.startsWith('>> الإجابة النموذجية')) {
@@ -659,16 +527,9 @@
         window.exportToPDF = () => {
             const element = document.getElementById('pdf-content');
             
-            // استخراج اسم الطالبة من النص لتسمية الملف به
-            let studentName = "طالبة";
-            const nameMatch = element.innerText.match(/اسم الطالبة:\s*(.+)/);
-            if (nameMatch && nameMatch[1]) {
-                studentName = nameMatch[1].trim();
-            }
-
             const opt = {
                 margin:       0.3,
-                filename:     `تقرير_التجويد_${studentName.replace(/\s+/g, '_')}.pdf`,
+                filename:     `تقرير_التجويد_${currentStudent.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { scale: 2, useCORS: true },
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
@@ -676,10 +537,9 @@
 
             const btn = document.getElementById('export-btn');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<span>جاري التصدير... ⏳</span>';
+            btn.innerHTML = '<span>جاري التنزيل... ⏳</span>';
             btn.disabled = true;
 
-            // توليد الملف وحفظه
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -687,10 +547,6 @@
         };
 
         window.closeDetailsModal = () => document.getElementById('details-modal').classList.add('hidden');
-
-        document.getElementById('teacher-pass').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') window.checkTeacherPassword();
-        });
     </script>
 </body>
 </html>
