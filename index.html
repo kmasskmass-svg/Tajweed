@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبارات التجويد - هدي المجيد</title>
+    <!-- استدعاء خط تجوال للنص العادي وخط أميري للقرآن الكريم -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <!-- مكتبة تصدير PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- استدعاء مكتبة Tailwind CSS للتصميم -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f766e', 
+                        secondary: '#d97706', 
+                        light: '#f0fdfa' 
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                        quran: ['"Amiri Quran"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #f0fdfa; }
+        .question-card { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #0f766e; border-radius: 4px; }
+        .is-invalid { border-color: #ef4444 !important; background-color: #fef2f2 !important; }
+        /* تنسيق الخط القرآني الجديد */
+        .quran-text { 
+            font-family: 'Amiri Quran', serif; 
+            font-size: 1.4em; 
+            color: #047857; 
+            line-height: 1.8;
+            padding: 0 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-gray-800">
+
+    <!-- الرأس / Header -->
+    <header class="bg-primary text-white shadow-md py-4 relative">
+        <div class="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-center relative">
+            <div class="sm:absolute sm:right-4 bg-white p-2 rounded-xl shadow-md mb-4 sm:mb-0 transition-transform hover:scale-105">
+                <img src="https://www.quranasir.edu.sa/rafed/uploads/system/project_637b3f889a105.jpg" alt="شعار جمعية تذكرة" class="h-16 md:h-20 w-auto object-contain">
+            </div>
+            <div class="text-center">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-1">اختبارات التجويد</h1>
+                <p class="text-teal-100 text-lg">من كتاب هدي المجيد في أحكام التجويد</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl relative">
+        
+        <!-- شاشة تم حل الاختبار مسبقاً -->
+        <div id="already-taken-screen" class="hidden bg-white rounded-2xl shadow-lg p-10 max-w-lg mx-auto border-t-4 border-red-500 text-center">
+            <div class="text-5xl mb-4">🚫</div>
+            <h2 class="text-2xl font-bold text-red-600 mb-4">عذراً.. لا يمكن الدخول</h2>
+            <p class="text-gray-600 leading-relaxed mb-6">لقد قمتِ بإجراء الاختبار وتسليم الإجابات مسبقاً من هذا الجهاز. يُسمح لكل طالبة بمحاولة واحدة فقط لضمان العدالة.</p>
+            <div class="text-sm text-gray-400 italic">إذا واجهتِ مشكلة تقنية، يرجى مراجعة المعلمة.</div>
+        </div>
+
+        <!-- شاشة الترحيب -->
+        <div id="welcome-screen" class="bg-white rounded-2xl shadow-lg p-6 md:p-10 max-w-lg mx-auto border-t-4 border-secondary">
+            <h2 class="text-2xl font-bold text-center text-primary mb-6">أهلاً بكِ طالبتنا الكريمة 🌸</h2>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">اسم الطالبة (الرباعي): <span class="text-red-500">*</span></label>
+                    <input type="text" id="student-name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary outline-none transition" placeholder="اكتبي اسمكِ الرباعي هنا...">
+                </div>
+                <div id="error-msg" class="hidden text-red-500 text-sm font-semibold text-center bg-red-50 p-2 rounded">الرجاء إدخال الاسم الرباعي كاملاً (4 كلمات على الأقل).</div>
+                <button onclick="startQuiz()" class="w-full bg-secondary hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-1 text-lg">بدء الاختبار</button>
+            </div>
+        </div>
+
+        <!-- شاشة الاختبار -->
+        <div id="quiz-screen" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow p-4 flex justify-between items-center border-r-4 border-primary">
+                <span class="font-bold text-lg text-primary" id="display-student-name"></span>
+                <span class="text-xs bg-teal-100 text-teal-800 py-1 px-3 rounded-full font-bold">يجب حل جميع الأسئلة للتسليم</span>
+            </div>
+            
+            <form id="quiz-form" class="space-y-6">
+                <div id="questions-container"></div>
+                
+                <div id="validation-error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center font-bold">
+                    ⚠️ تنبيه: يرجى الإجابة على جميع الأسئلة قبل تسليم الاختبار.
+                </div>
+
+                <div class="text-center pt-6 pb-10">
+                    <button type="button" onclick="showConfirmSubmit()" class="bg-primary hover:bg-teal-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition transform hover:scale-105 text-lg">تسليم الإجابات</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- نافذة تأكيد التسليم -->
+        <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-[60] p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center border-t-4 border-primary">
+                <div class="text-4xl mb-4">📤</div>
+                <h3 class="text-xl font-bold text-primary mb-4">تأكيد التسليم</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">هل أنتِ متأكدة من رغبتكِ في تسليم الإجابات الآن؟</p>
+                <div class="flex gap-2">
+                    <button id="final-submit-btn" onclick="window.confirmAndProcessSubmission()" class="flex-1 bg-primary text-white py-2 rounded-lg font-bold transition hover:bg-teal-700">نعم، تسليم</button>
+                    <button onclick="window.hideConfirmSubmit()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-bold transition hover:bg-gray-300">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة النتيجة -->
+        <div id="result-screen" class="hidden bg-white rounded-2xl shadow-lg p-6 md:p-10 max-w-2xl mx-auto border-t-4 border-primary text-center">
+            <h2 class="text-3xl font-bold text-primary mb-4">تم تسليم إجابتكِ! 🎉</h2>
+            <p class="text-lg text-gray-700 mb-2">الطالبة: <span id="result-name" class="font-bold text-primary"></span></p>
+            <div class="my-6 bg-teal-50 p-6 rounded-xl inline-block border border-teal-100">
+                <p class="text-gray-600 font-semibold mb-2">النتيجة المبدئية للأسئلة الموضوعية</p>
+                <div class="text-5xl font-extrabold text-secondary" id="score-display">0 / 0</div>
+                <p class="text-sm text-teal-700 mt-2">* درجة الأسئلة المقالية تُضاف لاحقاً من المعلمة</p>
+            </div>
+            
+            <div id="action-buttons-container" class="space-y-4 mt-8 text-center"></div>
+            
+            <button onclick="window.exitToHome()" class="mt-8 w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-black transition transform hover:scale-105">
+                الخروج والعودة للرئيسية
+            </button>
+        </div>
+
+        <!-- لوحة تحكم المعلمة -->
+        <div id="teacher-screen" class="hidden bg-white rounded-2xl shadow-lg p-6 md:p-10 max-w-4xl mx-auto border-t-4 border-secondary">
+            <div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 class="text-2xl font-bold text-primary flex items-center gap-2">📊 لوحة نتائج الطالبات</h2>
+                <button onclick="window.closeTeacherDashboard()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold text-sm transition">خروج</button>
+            </div>
+            <div id="teacher-status" class="text-center text-gray-500 py-8 font-semibold italic">جاري جلب النتائج...</div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse hidden" id="submissions-table">
+                    <thead>
+                        <tr class="bg-teal-50 text-teal-800 border-b-2 border-teal-200 text-sm">
+                            <th class="p-3">الطالبة</th>
+                            <th class="p-3">الدرجة</th>
+                            <th class="p-3">التاريخ</th>
+                            <th class="p-3 text-center">عرض</th>
+                        </tr>
+                    </thead>
+                    <tbody id="submissions-list"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- نافذة تسجيل دخول المعلمة -->
+        <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-[70] p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center border-t-4 border-primary">
+                <div class="text-3xl mb-4">🛡️</div>
+                <h3 class="text-xl font-bold text-primary mb-4">منطقة مخصصة</h3>
+                <input type="password" id="teacher-pass" class="w-full px-4 py-3 border rounded-lg mb-4 text-center focus:ring-2 focus:ring-primary outline-none" placeholder="كلمة المرور">
+                <div id="login-error" class="text-red-500 text-sm mb-4 hidden font-bold">كلمة المرور غير صحيحة!</div>
+                <div class="flex gap-2">
+                    <button onclick="window.checkTeacherPassword()" class="flex-1 bg-primary text-white py-2 rounded-lg font-bold transition hover:bg-teal-700">دخول</button>
+                    <button onclick="window.hideTeacherLogin()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-bold transition hover:bg-gray-300">إلغاء</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- نافذة التفاصيل -->
+        <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex-col items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]">
+                <div class="p-4 border-b flex justify-between items-center bg-primary text-white rounded-t-xl">
+                    <h3 class="font-bold text-lg">تفاصيل إجابات الطالبة</h3>
+                    <div class="flex items-center gap-4">
+                        <button id="export-btn" onclick="window.exportToPDF()" class="bg-white text-primary px-3 py-1.5 rounded text-sm font-bold shadow hover:bg-teal-50 transition flex items-center gap-1">
+                            <span>تصدير PDF 📥</span>
+                        </button>
+                        <button onclick="window.closeDetailsModal()" class="text-2xl font-bold hover:text-gray-200 transition">&times;</button>
+                    </div>
+                </div>
+                <div id="details-content" class="p-0 overflow-y-auto font-sans leading-relaxed bg-gray-50"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-xs relative select-none">
+        <p>حقوق الطبع محفوظة لجمعية تذكرة لتحفيظ القرآن بعسير <span onclick="window.showTeacherLogin()" class="cursor-default hover:text-gray-300 transition-colors duration-500">🌸</span></p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        let db, auth, appId;
+        let currentUser = null;
+        let authPromise = null;
+        const isFirebaseAvailable = typeof __firebase_config !== 'undefined';
+        
+        if (isFirebaseAvailable) {
+            try {
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+                authPromise = (async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        return await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        return await signInAnonymously(auth);
+                    }
+                })();
+
+                onAuthStateChanged(auth, (user) => { currentUser = user; });
+            } catch (e) { console.error("Firebase Error", e); }
+        }
+
+        // --- بنك الأسئلة مع إضافة الإجابات النموذجية للأسئلة المقالية ليظهر للمعلمة ---
+        const questionBank = {
+            tf: [
+                { q: "التنوين هو النون الخالية من الحركة ثابتة وصلا ووقفا وخطا ولفظا.", a: "خطأ" },
+                { q: "من الفروق بين النون والتنوين أن النون تكون في الأسماء فقط.", a: "خطأ" },
+                { q: "الإظهار الحلقي من أحكام الميم الساكنة.", a: "خطأ" },
+                { q: "رسم التنوين المتراكب كما في كلمة <span class='quran-text'>﴿ عَلِيمًا ﴾</span> هو علامة الإخفاء الحقيقي في المصحف.", a: "خطأ" },
+                { q: "من استثناءات حفص في الإدغام أنه جاءت <span class='quran-text'>﴿ دُنْيَا ﴾</span> في كلمة واحدة.", a: "صح" },
+                { q: "الإقلاب هو قلب النون الساكنة والتنوين ميمًا مخفاة عند الباء.", a: "صح" },
+                { q: "أعلى مراتب التفخيم المفتوح بعده ألف.", a: "صح" },
+                { q: "الحد من مبادئ العلوم وهو يعني التعريف.", a: "صح" },
+                { q: "معنى التجويد في اللغة: اخراج كل حرف من مخرجه مع إعطائه حقه ومستحقه.", a: "خطأ" },
+                { q: "هناك صفات لازمة للحرف لاتنفك عنه مثل الإظهار.", a: "خطأ" },
+                { q: "حكم تعلم التجويد النظري فرض عين.", a: "خطأ" },
+                { q: "اللحن في القرآن الكريم هو الخطأ والميل عن الصواب.", a: "صح" },
+                { q: "من اللحن الجلي في القرآن إبدال حرف بحرف.", a: "صح" },
+                { q: "التحقيق قراءة القرآن بسرعة مع مراعاة الأحكام بدقة.", a: "خطأ" },
+                { q: "أشهر صيغة من صيغ الاستعاذة أعوذ بالله من الشيطان الرجيم.", a: "صح" },
+                { q: "حكم الاستعاذة عند الجمهور الاستحباب.", a: "صح" },
+                { q: "من أوجه البسملة الجائزة بين السورتين وصل آخر السورة بالبسملة وقطعه عن بداية السورة.", a: "صح" },
+                { q: "النون والميم المشددتين فيها الغنة من أكمل ما تكون.", a: "صح" },
+                { q: "حروف القلقلة مجموعة في قولنا خص ضغط قظ.", a: "خطأ" },
+                { q: "تخلصت العرب من شدة الهمزة بقلقلتها.", a: "خطأ" },
+                { q: "ليس لحفص همزة قطع مسهلة وجوبا إلا في كلمة <span class='quran-text'>﴿ ءَا۬عْجَمِيٌّ ﴾</span>.", a: "صح" },
+                { q: "<span class='quran-text'>﴿ الْحَقُّ ﴾</span> في حال الوقف على القاف فإن فيها قلقلة أكبر.", a: "صح" },
+                { q: "يتوقف زمن النطق بالحرف الساكن على جريان الصوت معها.", a: "صح" },
+                { q: "اللسان فيه عشرة مخارج خاصة لثمانية عشر حرفا.", a: "صح" },
+                { q: "المذهب المعمول به عندنا في عدد مخارج الحروف هو مذهب ابن الجزري.", a: "صح" }
+            ],
+            mcq: [], // لا يوجد في الملف
+            fill: [
+                { q: "اتجاه ضغط الحرف عند النطق به إلى الحنك الأسفل هذا تعريف ____.", a: ["الاستفال"] },
+                { q: "تنقسم الحروف من حيث التفخيم والترقيق إلى: ____ و ____ و ____.", a: ["مفخمة", "مرققة", "مرققة أحيانا ومفخمة أحيانا", "مرققه", "مفخمه"] },
+                { q: "يوجد التفخيم النسبي في الحروف المستعلية المنفتحة وهي: ____.", a: ["غ،خ،ق", "غ خ ق", "الغين والخاء والقاف"] },
+                { q: "أقوى حروف التفخيم على الإطلاق هو حرف: ____.", a: ["الطاء", "طاء"] },
+                { q: "حكم اللام في قوله تعالى: <span class='quran-text'>﴿ لِلَّهِ ﴾</span> ____.", a: ["مرققة", "مرققه"] },
+                { q: "حكم الراء المفتوحة ____.", a: ["مفخمة", "مفخمه"] },
+                { q: "الراء في قوله تعالى: <span class='quran-text'>﴿ مَجْر۪اهَا ﴾</span> ____.", a: ["ممالة", "مماله"] },
+                { q: "حكم الراء في قوله تعالى: <span class='quran-text'>﴿ قِرْطَاسٍ ﴾</span> ____.", a: ["مفخمة", "مفخمه"] },
+                { q: "من الكلمات التي يجوز فيها وجهان وقفا <span class='quran-text'>﴿ مِصْرَ ﴾</span> ففيها وجه التفخيم لأن الراء ساكنة قبلها حرف ____.", a: ["استعلاء", "استعلاء ساكن"] },
+                { q: "الذي يقرأ القرآن وهو ماهر به مع ____.", a: ["السفرة الكرام البررة", "السفرة"] },
+                { q: "من آداب تلاوة القرآن ____.", a: ["استقبال القبلة", "الوضوء", "الطهارة", "السواك"] },
+                { q: "أركان القراءة الصحيحة هي: ____ و ____ و ____.", a: ["صحة السند", "موافقة العربية", "موافقة رسم المصحف"] },
+                { q: "تعريف القرآن هو كلام الله ____.", a: ["المتعبد بتلاوته"] },
+                { q: "بلغ النبي صلى الله عليه وسلم القرآن لأمته بطريقتين: ____ و ____.", a: ["منطوقا", "مكتوبا", "المنطوق والمكتوب"] },
+                { q: "الباعث على جمع القرآن في عهد أبي بكر هو خشية ____.", a: ["ضياع القرآن بموت حفظته", "ضياعه", "موت الحفظة"] },
+                { q: "من مراحل تدوين القرآن كتابة كل مقطع بين يدي ____.", a: ["رسول الله", "النبي"] },
+                { q: "الفرق بين القراءات السبع والأحرف السبعة: أن القراءات جزء من ____.", a: ["الأحرف السبعة"] },
+                { q: "القارئ الذي نقرأ بقراءته في المملكة العربية السعودية هو: ____ ، والرواية رواية ____.", a: ["عاصم", "حفص"] },
+                { q: "يعرف كل حرف من الحروف العربية بثلاثة أشياء: ____ و ____ و ____.", a: ["اسمه", "رسمه", "نطقه"] },
+                { q: "تعريف الحرف لغة: ____.", a: ["الطرف"] },
+                { q: "تعريف الحرف اصطلاحًا: صوت اعتمد على مخرج ____ أو ____.", a: ["محقق", "مقدر"] },
+                { q: "المخرج اصطلاحًا هو: ____.", a: ["محل خروج الحروف", "محل الخروج"] },
+                { q: "الكيفية التي يلفظ بها الحرف عند خروجه من مخرجه والتي تميزه عن غيره تسمى ____.", a: ["الصفة", "صفة", "الصفات"] },
+                { q: "من فوائد دراسة الصفات التمييز بين الحروف المشتركة في ____.", a: ["المخرج"] },
+                { q: "أنواع المخارج: مخارج محققة، ومخارج ____.", a: ["مقدرة", "مقدره"] },
+                { q: "عدد المخارج العامة ____.", a: ["خمسة", "خمسه", "5"] },
+                { q: "عدد المخارج الخاصة ____.", a: ["سبعة عشر", "17", "سبعه عشر"] },
+                { q: "المخرج العام لحرف القاف هو أقصى اللسان مع أقصى ____.", a: ["الحنك", "الحنك الأعلى"] },
+                { q: "الجوف مخرج واحد لحروف ____.", a: ["المد", "المد الثلاثة", "المديه"] },
+                { q: "إذا أهملتي صفة الإطباق والاستعلاء في حرف الظاء سيكون الحرف كأنه ____.", a: ["ذال", "حرف ذال"] },
+                { q: "تحدث الحروف المتحركة بـ ____ بين طرفي عضو النطق.", a: ["التباعد", "تباعد"] },
+                { q: "إتمام الحركات عند النطق بالحرف المفتوح يتم بـ ____ الفكين.", a: ["فتح"] },
+                { q: "إتمام الحركات عند النطق بالحرف المضموم يتم بـ ____ الشفتين.", a: ["ضم"] },
+                { q: "من الأخطاء الشائعة عند النطق بقوله تعالى: <span class='quran-text'>﴿ كُفُوًا ﴾</span> هو ____ الفاء.", a: ["تسكين"] },
+                { q: "حروف المد الثلاثة تحدث باهتزاز الحبال ____.", a: ["الصوتية", "الصوتيه"] },
+                { q: "صفة الشدة ضدها صفة ____.", a: ["الرخاوة", "الرخاوه"] },
+                { q: "أقصى عدد يتحمله الحرف من الصفات هو ____ صفات.", a: ["سبع", "7", "سبعة"] },
+                { q: "من الصفات التي ليس لها ضد: ____ و ____ و ____.", a: ["التفشي", "الصفير", "الاستطالة", "القلقلة", "الانحراف"] },
+                { q: "ينتج عن اجتماع صفتي الجهر والشدة صفة من الصفات التي ليس لها ضد وهي ____.", a: ["القلقلة", "القلقله"] },
+                { q: "الصفة التي تعرف بانحباس النفس أثناء نطق الحرف هي ____.", a: ["الجهر"] },
+                { q: "الصفة التي تعرف بجريان الصوت أثناء نطق الحرف هي ____.", a: ["الرخاوة", "الرخاوه"] },
+                { q: "حروف الاستعلاء مجموعة في قولنا ____.", a: ["خص ضغط قظ", "خص ضغط قظ."] },
+                { q: "يخرج من إحدى حافتي اللسان أو منهما معا مما يلي الأضراس العليا حرف ____.", a: ["الضاد"] },
+                { q: "الغنة تخرج من ____.", a: ["الخيشوم"] },
+                { q: "من الأخطاء الشائعة في حرف الألف المدية ____.", a: ["الإمالة", "التقليل", "الإمالة أو التقليل"] }
+            ],
+            essay: [
+                { 
+                  q: "استخرجي جميع أحكام التجويد التي درسناها بدون تكرار للحكم أو الحرف من الآية التالية:\n<br><span class='quran-text text-center block mt-4 leading-loose' style='font-size:1.5rem'>﴿ يَا أَيُّهَا النَّاسُ إِن كُنتُمْ فِي رَيْبٍ مِّنَ الْبَعْثِ فَإِنَّا خَلَقْنَاكُم مِّن تُرَابٍ ثُمَّ مِن نُّطْفَةٍ ثُمَّ مِنْ عَلَقَةٍ ثُمَّ مِن مُّضْغَةٍ مُّخَلَّقَةٍ وَغَيْرِ مُخَلَّقَةٍ لِّنُبَيِّنَ لَكُمْ ۚ وَنُقِرُّ فِي الْأَرْحَامِ مَا نَشَاءُ إِلَىٰ أَجَلٍ مُّسَمًّى ثُمَّ نُخْرِجُكُمْ طِفْلًا ثُمَّ لِتَبْلُغُوا أَشُدَّكُمْ ۖ وَمِنكُم مَّن يُتَوَفَّىٰ وَمِنكُم مَّن يُرَدُّ إِلَىٰ أَرْذَلِ الْعُمُرِ لِكَيْلَا يَعْلَمَ مِن بَعْدِ عِلْمٍ شَيْئًا ۚ وَتَرَى الْأَرْضَ هَامِدَةً فَإِذَا أَنزَلْنَا عَلَيْهَا الْمَاءَ اهْتَزَّتْ وَرَبَتْ وَأَنبَتَتْ مِن كُلِّ زَوْجٍ بَهِيجٍ ﴾</span>", 
+                  a: "يُترك التقييم للمعلمة (بحسب استخراج الطالبة للأحكام الموجودة في الآية المعروضة)." 
+                },
+                { q: "عددي صفات حرف الراء.", a: "الجهر، التوسط (البينية)، الاستفال، الانفتاح، الإذلاق، الانحراف، التكرير." },
+                { q: "اذكري المخرج العام والخاص لحرف الفاء.", a: "المخرج العام: الشفتان. | المخرج الخاص: باطن الشفة السفلى مع أطراف الثنايا العليا." },
+                { q: "عددي الأوجه الجائزة بين الأنفال وبراءة؟", a: "القطع، السكت، الوصل (وكلها من غير بسملة)." },
+                { q: "عللي: لا يبسمل القارئ في أول سورة براءة؟", a: "لأن سورة براءة نزلت بالسيف والبراءة من المشركين، والبسملة رحمة وأمان، ولا يتناسبان." },
+                { q: "عللي: سبب تسمية حروف الذلاقة بهذا الاسم؟", a: "لخروجها من ذلق اللسان والشفتين (أي من طرفيهما)." },
+                { q: "عللي: سبب إدغام التاء في الطاء إدغاما كاملا؟", a: "للتجانس بينهما (اتحادهما في المخرج واختلافهما في بعض الصفات)." },
+                { q: "عللي: سبب الإظهار الحلقي؟", a: "لبعد مخرج النون والتنوين عن مخرج حروف الحلق." },
+                { q: "عللي: سبب الإخفاء الشفوي؟", a: "لاتحاد الميم والباء في المخرج (الشفتين) وتقاربهما في الصفات." }
+            ]
+        };
+
+        const TEACHER_EMAIL = "kmasskmass@gmail.com";
+        const APP_COMPLETION_KEY = "has_taken_tajweed_quiz_final_v3";
+
+        let currentStudent = "", selectedQuestions = [], finalScore = 0, totalObjectivePoints = 0, reportData = "";
+
+        // التحقق عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            if (localStorage.getItem(APP_COMPLETION_KEY)) {
+                showTakenScreen();
+            }
+        });
+
+        function showTakenScreen() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('already-taken-screen').classList.remove('hidden');
+        }
+
+        window.startQuiz = () => {
+            if (localStorage.getItem(APP_COMPLETION_KEY)) {
+                showTakenScreen();
+                return;
+            }
+
+            const name = document.getElementById('student-name').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+            const wordCount = name.split(/\s+/).filter(word => word.length > 0).length;
+
+            if (wordCount < 4) {
+                errorMsg.classList.remove('hidden');
+                document.getElementById('student-name').classList.add('is-invalid');
+                return;
+            }
+
+            errorMsg.classList.add('hidden');
+            document.getElementById('student-name').classList.remove('is-invalid');
+            currentStudent = name;
+            
+            document.getElementById('display-student-name').innerText = "الطالبة: " + name;
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            generateQuizUI();
+        };
+
+        function generateQuizUI() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            selectedQuestions = [];
+            const getRandom = (arr, count) => [...arr].sort(() => 0.5 - Math.random()).slice(0, count);
+            
+            // تحديد عدد الأسئلة التي ستظهر للطالبة (عشوائياً من البنك)
+            const tfQs = getRandom(questionBank.tf, 10); 
+            const mcqQs = getRandom(questionBank.mcq, 0); 
+            const fillQs = getRandom(questionBank.fill, 10); 
+            const essayQs = getRandom(questionBank.essay, 4); 
+
+            let qIdx = 1;
+            const sections = [
+                { title: "أولاً: صح أو خطأ", data: tfQs, type: 'tf' },
+                { title: "ثانياً: خيارات", data: mcqQs, type: 'mcq' },
+                { title: "ثالثاً: أكملي الفراغات التالية", data: fillQs, type: 'fill' },
+                { title: "رابعاً: أجيبي عن الأسئلة التالية", data: essayQs, type: 'essay' }
+            ];
+
+            sections.forEach(s => {
+                if(s.data.length === 0) return;
+                let html = `<div class="bg-white p-6 rounded-xl shadow-md border-t-2 border-primary mb-6"><h3 class="font-bold text-primary border-b pb-2 mb-4 text-lg">${s.title}</h3>`;
+                s.data.forEach((q, i) => {
+                    const id = `${s.type}_${i}`;
+                    selectedQuestions.push({ type: s.type, obj: q, id });
+                    html += `<div class="mb-4 p-3 bg-gray-50 rounded-lg"><p class="font-semibold mb-3 leading-relaxed text-gray-800">${qIdx}. `;
+                    if(s.type === 'fill') {
+                        let blankCount = 0;
+                        html += q.q.replace(/____/g, () => {
+                            const input = `<input type="text" name="${id}_blank_${blankCount}" class="w-24 sm:w-32 border-b-2 border-primary bg-transparent focus:outline-none px-2 mx-1 text-center font-bold text-primary" placeholder="الإجابة">`;
+                            blankCount++;
+                            return input;
+                        }) + `</p>`;
+                    } else {
+                        html += `${q.q}</p>`;
+                        if(s.type === 'tf') {
+                            html += `<div class="flex gap-4"><label class="cursor-pointer bg-white px-4 py-2 rounded border hover:bg-green-50 transition"><input type="radio" name="${id}" value="صح"> صح</label><label class="cursor-pointer bg-white px-4 py-2 rounded border hover:bg-red-50 transition"><input type="radio" name="${id}" value="خطأ"> خطأ</label></div>`;
+                        } else if(s.type === 'mcq') {
+                            html += `<div class="grid grid-cols-1 sm:grid-cols-3 gap-2">`;
+                            q.options.forEach(opt => {
+                                html += `<label class="cursor-pointer bg-white border p-3 rounded hover:bg-teal-50"><input type="radio" name="${id}" value="${opt}"> ${opt}</label>`;
+                            });
+                            html += `</div>`;
+                        } else {
+                            html += `<textarea name="${id}" rows="3" class="w-full p-3 border rounded outline-none focus:ring-1 focus:ring-primary" placeholder="اكتبي إجابتكِ هنا..."></textarea>`;
+                        }
+                    }
+                    html += `</div>`;
+                    qIdx++;
+                });
+                container.innerHTML += html + `</div>`;
+            });
+        }
+
+        window.showConfirmSubmit = () => {
+            const form = document.getElementById('quiz-form');
+            const formData = new FormData(form);
+            let allAnswered = true;
+            const validationError = document.getElementById('validation-error');
+
+            selectedQuestions.forEach(item => {
+                if (item.type === 'fill') {
+                    const blankInputs = document.querySelectorAll(`input[name^="${item.id}_blank_"]`);
+                    blankInputs.forEach(input => {
+                        if (!input.value.trim()) allAnswered = false;
+                    });
+                } else if (['tf', 'mcq'].includes(item.type)) {
+                    if (!formData.get(item.id)) allAnswered = false;
+                } else {
+                    if (!formData.get(item.id)?.trim()) allAnswered = false;
+                }
+            });
+
+            if (!allAnswered) {
+                validationError.classList.remove('hidden');
+                window.scrollTo({ top: validationError.offsetTop - 100, behavior: 'smooth' });
+                return;
+            }
+
+            validationError.classList.add('hidden');
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        };
+
+        window.hideConfirmSubmit = () => {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        };
+
+        window.confirmAndProcessSubmission = async () => {
+            const btn = document.getElementById('final-submit-btn');
+            btn.disabled = true;
+            btn.innerText = "جاري الحفظ...";
+            window.hideConfirmSubmit();
+            await processSubmission();
+        };
+
+        async function processSubmission() {
+            finalScore = 0; totalObjectivePoints = 0;
+            reportData = `اسم الطالبة: ${currentStudent}\nتاريخ التسليم: ${new Date().toLocaleString('ar-SA')}\n------------------\n`;
+            const formData = new FormData(document.getElementById('quiz-form'));
+
+            selectedQuestions.forEach((item, index) => {
+                const cleanQuestion = item.obj.q.replace(/<[^>]*>?/gm, '');
+                reportData += `س${index+1}: ${cleanQuestion}\n`;
+                
+                if (item.type === 'fill') {
+                    const blankInputs = document.querySelectorAll(`input[name^="${item.id}_blank_"]`);
+                    blankInputs.forEach((input, bIdx) => {
+                        totalObjectivePoints++;
+                        let userAns = input.value.trim();
+                        let isCorrect = false;
+                        let correctAnswersText = "";
+
+                        if(item.obj.a && Array.isArray(item.obj.a)) {
+                            // تجميع الإجابات المحتملة لعرضها للمعلمة
+                            correctAnswersText = item.obj.a.join(' أو ');
+                            isCorrect = item.obj.a.some(correctVal => 
+                                userAns.replace(/\s/g,'') === correctVal.replace(/\s/g,'') || 
+                                (userAns.length > 2 && correctVal.includes(userAns)) || 
+                                (userAns.length > 2 && userAns.includes(correctVal))
+                            );
+                        }
+                        
+                        reportData += `فراغ ${bIdx+1}: [${userAns}]\n>> الإجابة النموذجية: (${correctAnswersText})\n`;
+                        if (isCorrect) finalScore++;
+                    });
+                } else if (['tf','mcq'].includes(item.type)) {
+                    totalObjectivePoints++;
+                    let ans = (formData.get(item.id) || "لم تُجب").trim();
+                    reportData += `إجابتكِ: ${ans}\n>> الإجابة النموذجية: (${item.obj.a})\n`;
+                    if (ans === item.obj.a) finalScore++;
+                } else {
+                    let ans = (formData.get(item.id) || "لم تُجب").trim();
+                    // عرض إجابة الطالبة وإجابة المعلمة للتقييم
+                    reportData += `إجابتكِ:\n${ans}\n\n>> الإجابة النموذجية (لتقييم المعلمة):\n${item.obj.a}\n`;
+                }
+                reportData += `\n`;
+            });
+
+            reportData += `------------------\nالدرجة الآلية (للأسئلة الموضوعية فقط): ${finalScore} من ${totalObjectivePoints}`;
+
+            let saved = false;
+            if (isFirebaseAvailable && db) {
+                try {
+                    if (authPromise) await authPromise;
+                    if (currentUser) {
+                        const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'submissions');
+                        await addDoc(colRef, {
+                            studentName: currentStudent,
+                            score: finalScore,
+                            total: totalObjectivePoints,
+                            reportData: reportData,
+                            timestamp: new Date().toISOString()
+                        });
+                        saved = true;
+                        localStorage.setItem(APP_COMPLETION_KEY, "true");
+                    }
+                } catch (e) { console.error("Cloud Save Failed", e); }
+            }
+
+            const actionContainer = document.getElementById('action-buttons-container');
+            if (saved) {
+                actionContainer.innerHTML = `<div class="bg-green-100 border border-green-300 text-green-700 font-bold py-5 rounded-xl text-center">✅ تم حفظ النتيجة بنجاح وإرسالها للمعلمة!</div>`;
+            } else {
+                actionContainer.innerHTML = `<button onclick="window.sendEmail()" class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg">📧 إرسال النتيجة بالبريد (فشل الحفظ التلقائي)</button>`;
+            }
+
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('result-name').innerText = currentStudent;
+            document.getElementById('score-display').innerText = `${finalScore} / ${totalObjectivePoints}`;
+            window.scrollTo(0,0);
+        }
+
+        window.exitToHome = () => {
+            document.getElementById('result-screen').classList.add('hidden');
+            if (localStorage.getItem(APP_COMPLETION_KEY)) {
+                showTakenScreen();
+            } else {
+                document.getElementById('welcome-screen').classList.remove('hidden');
+                document.getElementById('student-name').value = '';
+            }
+            window.scrollTo(0,0);
+        };
+
+        window.sendEmail = () => {
+            const body = `الطالبة: ${currentStudent}\nالدرجة المبدئية: ${finalScore}/${totalObjectivePoints}\n\nيرجى مراجعة التفاصيل في لوحة التحكم للتقييم النهائي.`;
+            window.location.href = `mailto:${TEACHER_EMAIL}?subject=${encodeURIComponent("نتيجة اختبار التجويد: "+currentStudent)}&body=${encodeURIComponent(body)}`;
+        };
+
+        window.showTeacherLogin = () => {
+            const modal = document.getElementById('login-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.getElementById('teacher-pass').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('teacher-pass').focus();
+        };
+
+        window.hideTeacherLogin = () => {
+            const modal = document.getElementById('login-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
+        };
+
+        window.checkTeacherPassword = () => {
+            if (document.getElementById('teacher-pass').value === "8780") {
+                window.hideTeacherLogin();
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('quiz-screen').classList.add('hidden');
+                document.getElementById('result-screen').classList.add('hidden');
+                document.getElementById('already-taken-screen').classList.add('hidden');
+                document.getElementById('teacher-screen').classList.remove('hidden');
+                loadData();
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        };
+
+        window.closeTeacherDashboard = () => {
+            if (unsubscribe) unsubscribe();
+            document.getElementById('teacher-screen').classList.add('hidden');
+            if (localStorage.getItem(APP_COMPLETION_KEY)) {
+                showTakenScreen();
+            } else {
+                document.getElementById('welcome-screen').classList.remove('hidden');
+            }
+        };
+
+        let unsubscribe = null;
+        async function loadData() {
+            const status = document.getElementById('teacher-status');
+            const table = document.getElementById('submissions-table');
+            const list = document.getElementById('submissions-list');
+            if (isFirebaseAvailable && authPromise) await authPromise;
+            
+            unsubscribe = onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'submissions'), 
+                (snap) => {
+                    list.innerHTML = '';
+                    if(snap.empty) { status.innerText = "لا توجد نتائج."; table.classList.add('hidden'); return; }
+                    status.classList.add('hidden'); table.classList.remove('hidden');
+                    const docs = [];
+                    snap.forEach(d => docs.push(d.data()));
+                    docs.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    docs.forEach(d => {
+                        const tr = document.createElement('tr');
+                        tr.className = "border-b hover:bg-gray-50 transition text-sm";
+                        tr.innerHTML = `
+                            <td class="p-3 font-semibold text-right">${d.studentName}</td>
+                            <td class="p-3 text-secondary font-bold text-right">${d.score}/${d.total}</td>
+                            <td class="p-3 text-xs text-gray-500 text-right font-mono" dir="ltr">${new Date(d.timestamp).toLocaleString('ar-EG')}</td>
+                            <td class="p-3 text-center"><button onclick="window.viewDetails('${encodeURIComponent(d.reportData)}')" class="bg-teal-600 text-white px-2 py-1 rounded text-xs font-bold transition hover:bg-teal-700">عرض</button></td>
+                        `;
+                        list.appendChild(tr);
+                    });
+                }, (err) => { status.innerText = "خطأ في الصلاحيات."; }
+            );
+        }
+
+        window.viewDetails = (data) => {
+            const decodedData = decodeURIComponent(data);
+            
+            // تحويل النص الخام إلى قالب HTML جميل للطباعة
+            let formattedHTML = `<div class="text-center mb-6 border-b-2 border-primary pb-4">
+                                    <h2 class="text-2xl font-bold text-primary mt-2">تقرير نتيجة اختبار التجويد</h2>
+                                 </div>`;
+            
+            const lines = decodedData.split('\n');
+            lines.forEach(line => {
+                if (!line.trim() && !line.includes('---')) return;
+
+                if (line.startsWith('اسم الطالبة:')) {
+                    formattedHTML += `<p class="text-xl font-bold text-gray-800 mb-2">👩‍🎓 ${line}</p>`;
+                } else if (line.startsWith('تاريخ التسليم:')) {
+                    formattedHTML += `<p class="text-sm text-gray-500 mb-4 font-mono">🕒 ${line}</p>`;
+                } else if (line.startsWith('---')) {
+                    formattedHTML += `<hr class="my-4 border-teal-200">`;
+                } else if (line.startsWith('س')) {
+                    formattedHTML += `<div class="bg-teal-100 p-3 rounded-lg mt-5 mb-2 border border-teal-200"><h4 class="font-bold text-teal-900">${line}</h4></div>`;
+                } else if (line.includes('✅')) {
+                    formattedHTML += `<p class="text-green-700 font-bold px-3 mt-1"> ${line}</p>`;
+                } else if (line.includes('❌')) {
+                    formattedHTML += `<p class="text-red-700 font-bold px-3 mt-1"> ${line}</p>`;
+                } else if (line.startsWith('الدرجة الآلية')) {
+                    formattedHTML += `<div class="bg-primary text-white p-4 rounded-xl text-center text-xl font-bold mt-8 mb-2 mx-2 shadow-md">${line}</div>`;
+                } else if (line.startsWith('>> الإجابة النموذجية')) {
+                     formattedHTML += `<p class="text-teal-700 text-sm font-bold px-3 bg-teal-50 py-2 rounded inline-block mt-2 mb-3 shadow-sm border border-teal-100">💡 ${line.replace('>> ', '')}</p>`;
+                } else {
+                    formattedHTML += `<p class="text-gray-700 px-3 mb-1">${line}</p>`;
+                }
+            });
+
+            document.getElementById('details-content').innerHTML = `<div id="pdf-content" class="bg-white p-6 pb-10" dir="rtl">${formattedHTML}</div>`;
+            document.getElementById('details-modal').classList.remove('hidden'); 
+            document.getElementById('details-modal').classList.add('flex');
+        };
+
+        window.exportToPDF = () => {
+            const element = document.getElementById('pdf-content');
+            
+            // استخراج اسم الطالبة من النص لتسمية الملف به
+            let studentName = "طالبة";
+            const nameMatch = element.innerText.match(/اسم الطالبة:\s*(.+)/);
+            if (nameMatch && nameMatch[1]) {
+                studentName = nameMatch[1].trim();
+            }
+
+            const opt = {
+                margin:       0.3,
+                filename:     `تقرير_التجويد_${studentName.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            const btn = document.getElementById('export-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>جاري التصدير... ⏳</span>';
+            btn.disabled = true;
+
+            // توليد الملف وحفظه
+            html2pdf().set(opt).from(element).save().then(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        };
+
+        window.closeDetailsModal = () => document.getElementById('details-modal').classList.add('hidden');
+
+        document.getElementById('teacher-pass').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') window.checkTeacherPassword();
+        });
+    </script>
+</body>
+</html>
