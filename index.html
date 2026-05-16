@@ -66,7 +66,7 @@
         <div id="already-taken-screen" class="hidden bg-white rounded-2xl shadow-lg p-10 max-w-lg mx-auto border-t-4 border-red-500 text-center">
             <div class="text-5xl mb-4">🚫</div>
             <h2 class="text-2xl font-bold text-red-600 mb-4">عذراً.. لا يمكن الدخول</h2>
-            <p class="text-gray-600 leading-relaxed mb-6">لقد قمتِ بإجراء الاختبار وتسليم الإجابات مسبقاً من هذا الجهاز. يُسمح لكل طالبة بمحاولة واحدة فقط لضمان العدالة.</p>
+            <p class="text-gray-600 leading-relaxed mb-6">لقد استنفدتِ جميع المحاولات المسموحة لكِ لإجراء هذا الاختبار من هذا الجهاز.</p>
             <div class="text-sm text-gray-400 italic">إذا واجهتِ مشكلة تقنية، يرجى مراجعة المعلمة.</div>
         </div>
 
@@ -184,7 +184,8 @@
         const TEACHER_EMAIL = "Maryamalshnini@gmail.com"; 
         const TEACHER_WHATSAPP = "966502581522"; 
 
-        const APP_COMPLETION_KEY = "has_taken_tajweed_quiz_final_v6";
+        const APP_COMPLETION_KEY = "has_taken_tajweed_quiz_final_v7";
+        const MAX_ATTEMPTS = 1; // 💡 غيّري هذا الرقم إلى 2 أو 3 لزيادة عدد المحاولات المسموحة للطالبة
 
         // --- بنك الأسئلة ---
         const questionBank = {
@@ -282,7 +283,8 @@
         let currentStudent = "", selectedQuestions = [], finalScore = 0, totalObjectivePoints = 0, reportData = "";
 
         window.addEventListener('load', () => {
-            if (localStorage.getItem(APP_COMPLETION_KEY)) {
+            let attempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
+            if (attempts >= MAX_ATTEMPTS) {
                 showTakenScreen();
             }
         });
@@ -295,7 +297,8 @@
         }
 
         window.startQuiz = () => {
-            if (localStorage.getItem(APP_COMPLETION_KEY)) {
+            let attempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
+            if (attempts >= MAX_ATTEMPTS) {
                 showTakenScreen();
                 return;
             }
@@ -457,7 +460,8 @@
 
             reportData += `------------------\nالدرجة الآلية (للأسئلة الموضوعية فقط): ${finalScore} من ${totalObjectivePoints}`;
 
-            localStorage.setItem(APP_COMPLETION_KEY, "true");
+            let currentAttempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
+            localStorage.setItem(APP_COMPLETION_KEY, (currentAttempts + 1).toString());
 
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
@@ -489,7 +493,13 @@
 
         window.exitToHome = () => {
             document.getElementById('result-screen').classList.add('hidden');
-            showTakenScreen();
+            let attempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
+            if (attempts >= MAX_ATTEMPTS) {
+                showTakenScreen();
+            } else {
+                document.getElementById('welcome-screen').classList.remove('hidden');
+                document.getElementById('student-name').value = '';
+            }
             window.scrollTo(0,0);
         };
 
