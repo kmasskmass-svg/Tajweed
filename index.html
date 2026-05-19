@@ -54,7 +54,8 @@
                 <img src="https://www.quranasir.edu.sa/rafed/uploads/system/project_637b3f889a105.jpg" alt="شعار جمعية تذكرة" class="h-16 md:h-20 w-auto object-contain">
             </div>
             <div class="text-center">
-                <h1 class="text-3xl md:text-4xl font-extrabold mb-1">اختبار التجويد</h1>
+                <!-- أضفت هنا معرّف (ID) للعنوان ليتمكن من استقبال الضغطات السرية -->
+                <h1 id="secret-unlock-btn" class="text-3xl md:text-4xl font-extrabold mb-1 cursor-pointer select-none">اختبار التجويد</h1>
                 <p class="text-teal-100 text-lg">من كتاب هدي المجيد في أحكام التجويد</p>
             </div>
         </div>
@@ -78,8 +79,8 @@
                     <label class="block text-sm font-semibold text-gray-700 mb-2">اسم الطالبة (الرباعي): <span class="text-red-500">*</span></label>
                     <input type="text" id="student-name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary outline-none transition" placeholder="اكتبي اسمكِ الرباعي هنا...">
                 </div>
-                <div id="error-msg" class="hidden text-red-500 text-sm font-semibold text-center bg-red-50 p-2 rounded">الرجاء إدخال الاسم الرباعي كاملاً (4 كلمات على الأقل).</div>
-                <button onclick="startQuiz()" class="w-full bg-secondary hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-1 text-lg">بدء الاختبار</button>
+                <div id="error-msg" class="hidden text-red-500 text-sm font-semibold text-center bg-red-50 p-2 rounded">الرجاء إدخال الاسم الرباعي كاملاً (4 كلمات على الأقل يفصل بينها مسافة).</div>
+                <button type="button" onclick="window.startQuiz()" class="w-full bg-secondary hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg shadow-md transition transform hover:-translate-y-1 text-lg">بدء الاختبار</button>
             </div>
         </div>
 
@@ -98,7 +99,7 @@
                 </div>
 
                 <div class="text-center pt-6 pb-10">
-                    <button type="button" onclick="showConfirmSubmit()" class="bg-primary hover:bg-teal-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition transform hover:scale-105 text-lg">إنهاء وتصحيح الإجابات</button>
+                    <button type="button" onclick="window.showConfirmSubmit()" class="bg-primary hover:bg-teal-700 text-white font-bold py-3 px-10 rounded-xl shadow-lg transition transform hover:scale-105 text-lg">إنهاء وتصحيح الإجابات</button>
                 </div>
             </form>
         </div>
@@ -110,8 +111,8 @@
                 <h3 class="text-xl font-bold text-primary mb-4">تأكيد الإنهاء</h3>
                 <p class="text-gray-600 mb-6 leading-relaxed">هل أنتِ متأكدة من رغبتكِ في إنهاء الاختبار وتصحيح الإجابات؟</p>
                 <div class="flex gap-2">
-                    <button id="final-submit-btn" onclick="window.confirmAndProcessSubmission()" class="flex-1 bg-primary text-white py-2 rounded-lg font-bold transition hover:bg-teal-700">نعم، متأكدة</button>
-                    <button onclick="window.hideConfirmSubmit()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-bold transition hover:bg-gray-300">إلغاء</button>
+                    <button type="button" id="final-submit-btn" onclick="window.confirmAndProcessSubmission()" class="flex-1 bg-primary text-white py-2 rounded-lg font-bold transition hover:bg-teal-700">نعم، متأكدة</button>
+                    <button type="button" onclick="window.hideConfirmSubmit()" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-bold transition hover:bg-gray-300">إلغاء</button>
                 </div>
             </div>
         </div>
@@ -132,39 +133,39 @@
             </div>
 
             <div id="action-buttons-container" class="space-y-3 mt-4 flex flex-col items-center">
-                <button onclick="window.sendWhatsApp()" class="w-full sm:w-3/4 bg-green-500 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-600 transition flex items-center justify-center gap-2">
+                <button type="button" onclick="window.sendWhatsApp()" class="w-full sm:w-3/4 bg-green-500 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-green-600 transition flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
                     إرسال النتيجة عبر الواتساب
                 </button>
-                <button onclick="window.sendEmail()" class="w-full sm:w-3/4 bg-primary text-white font-bold py-3 rounded-xl shadow hover:bg-teal-700 transition">
+                <button type="button" onclick="window.sendEmail()" class="w-full sm:w-3/4 bg-primary text-white font-bold py-3 rounded-xl shadow hover:bg-teal-700 transition">
                     📧 إرسال النتيجة عبر الإيميل
                 </button>
-                <button onclick="window.copyToClipboard()" class="w-full sm:w-3/4 bg-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-300 transition">
+                <button type="button" onclick="window.copyToClipboard()" class="w-full sm:w-3/4 bg-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-300 transition">
                     📋 نسخ التقرير كاملاً
                 </button>
                 <p id="copy-status" class="text-green-600 font-bold hidden text-sm">تم نسخ التقرير! يمكنك لصقه للمعلمة.</p>
             </div>
 
-            <button onclick="window.viewDetailsLocally()" class="mt-8 text-teal-600 underline font-bold hover:text-teal-800 text-sm">
+            <button type="button" onclick="window.viewDetailsLocally()" class="mt-8 text-teal-600 underline font-bold hover:text-teal-800 text-sm">
                 عرض تقرير إجاباتي بالتفصيل (أو تنزيله PDF)
             </button>
             
             <hr class="my-6 border-gray-200">
-            <button onclick="window.exitToHome()" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-black transition">
+            <button type="button" onclick="window.exitToHome()" class="w-full bg-gray-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-black transition">
                 الخروج من الاختبار
             </button>
         </div>
 
-        <!-- نافذة التفاصيل (تعرض للطالبة تقريرها قبل الإرسال لتنزيله PDF) -->
+        <!-- نافذة التفاصيل -->
         <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex-col items-center justify-center z-50 p-4">
             <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]">
                 <div class="p-4 border-b flex justify-between items-center bg-primary text-white rounded-t-xl">
                     <h3 class="font-bold text-lg">تفاصيل إجاباتك</h3>
                     <div class="flex items-center gap-4">
-                        <button id="export-btn" onclick="window.exportToPDF()" class="bg-white text-primary px-3 py-1.5 rounded text-sm font-bold shadow hover:bg-teal-50 transition flex items-center gap-1">
+                        <button type="button" id="export-btn" onclick="window.exportToPDF()" class="bg-white text-primary px-3 py-1.5 rounded text-sm font-bold shadow hover:bg-teal-50 transition flex items-center gap-1">
                             <span>تنزيل PDF 📥</span>
                         </button>
-                        <button onclick="window.closeDetailsModal()" class="text-2xl font-bold hover:text-gray-200 transition">&times;</button>
+                        <button type="button" onclick="window.closeDetailsModal()" class="text-2xl font-bold hover:text-gray-200 transition">&times;</button>
                     </div>
                 </div>
                 <div id="details-content" class="p-0 overflow-y-auto font-sans leading-relaxed bg-gray-50"></div>
@@ -184,8 +185,26 @@
         const TEACHER_EMAIL = "Maryamalshnini@gmail.com"; 
         const TEACHER_WHATSAPP = "966502581522"; 
 
-        const APP_COMPLETION_KEY = "has_taken_tajweed_quiz_final_v7";
-        const MAX_ATTEMPTS = 1; // 💡 غيّري هذا الرقم إلى 2 أو 3 لزيادة عدد المحاولات المسموحة للطالبة
+        const APP_COMPLETION_KEY = "has_taken_tajweed_quiz_final_v8";
+        const MAX_ATTEMPTS = 1; // 💡 غيّري هذا الرقم لزيادة عدد المحاولات المسموحة للطالبة
+
+        // دوال الحفظ الآمن (لتجاوز مشاكل حظر المتصفحات الداخلية في الآيفون)
+        function safeGetAttempts() {
+            try {
+                return parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
+            } catch (e) {
+                return 0; // السماح بالدخول في حال كان الحفظ معطلاً
+            }
+        }
+
+        function safeIncrementAttempts() {
+            try {
+                let currentAttempts = safeGetAttempts();
+                localStorage.setItem(APP_COMPLETION_KEY, (currentAttempts + 1).toString());
+            } catch (e) {
+                console.warn("تعذر الحفظ بسبب قيود المتصفح.");
+            }
+        }
 
         // --- بنك الأسئلة ---
         const questionBank = {
@@ -283,8 +302,7 @@
         let currentStudent = "", selectedQuestions = [], finalScore = 0, totalObjectivePoints = 0, reportData = "";
 
         window.addEventListener('load', () => {
-            let attempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
-            if (attempts >= MAX_ATTEMPTS) {
+            if (safeGetAttempts() >= MAX_ATTEMPTS) {
                 showTakenScreen();
             }
         });
@@ -296,32 +314,33 @@
             document.getElementById('already-taken-screen').classList.remove('hidden');
         }
 
-        window.startQuiz = () => {
-            let attempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
-            if (attempts >= MAX_ATTEMPTS) {
+        function startQuiz() {
+            if (safeGetAttempts() >= MAX_ATTEMPTS) {
                 showTakenScreen();
                 return;
             }
 
-            const name = document.getElementById('student-name').value.trim();
+            const nameInput = document.getElementById('student-name');
+            const name = nameInput.value.trim();
             const errorMsg = document.getElementById('error-msg');
             const wordCount = name.split(/\s+/).filter(word => word.length > 0).length;
 
             if (wordCount < 4) {
                 errorMsg.classList.remove('hidden');
-                document.getElementById('student-name').classList.add('is-invalid');
+                nameInput.classList.add('is-invalid');
                 return;
             }
 
             errorMsg.classList.add('hidden');
-            document.getElementById('student-name').classList.remove('is-invalid');
+            nameInput.classList.remove('is-invalid');
             currentStudent = name;
             
             document.getElementById('display-student-name').innerText = "الطالبة: " + name;
             document.getElementById('welcome-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.remove('hidden');
             generateQuizUI();
-        };
+        }
+        window.startQuiz = startQuiz;
 
         function generateQuizUI() {
             const container = document.getElementById('questions-container');
@@ -377,7 +396,7 @@
             });
         }
 
-        window.showConfirmSubmit = () => {
+        function showConfirmSubmit() {
             const form = document.getElementById('quiz-form');
             const formData = new FormData(form);
             let allAnswered = true;
@@ -405,22 +424,36 @@
             validationError.classList.add('hidden');
             const modal = document.getElementById('confirm-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
-        };
+        }
+        window.showConfirmSubmit = showConfirmSubmit;
 
-        window.hideConfirmSubmit = () => {
+        function hideConfirmSubmit() {
             const modal = document.getElementById('confirm-modal');
             modal.classList.add('hidden'); modal.classList.remove('flex');
-        };
+        }
+        window.hideConfirmSubmit = hideConfirmSubmit;
 
-        window.confirmAndProcessSubmission = () => {
-            window.hideConfirmSubmit();
+        function confirmAndProcessSubmission() {
+            hideConfirmSubmit();
             processSubmission();
-        };
+        }
+        window.confirmAndProcessSubmission = confirmAndProcessSubmission;
 
         function processSubmission() {
             finalScore = 0; totalObjectivePoints = 0;
             reportData = `اسم الطالبة: ${currentStudent}\nتاريخ التسليم: ${new Date().toLocaleString('ar-SA')}\n------------------\n`;
-            const formData = new FormData(document.getElementById('quiz-form'));
+            
+            // بديل متوافق تماماً مع متصفحات الآيفون القديمة لجمع البيانات
+            const formElements = document.getElementById('quiz-form').elements;
+            const getAnswer = (name) => {
+                let els = document.getElementsByName(name);
+                if (els.length > 0 && els[0].type === 'radio') {
+                    for (let el of els) { if (el.checked) return el.value; }
+                } else if (els.length > 0) {
+                    return els[0].value;
+                }
+                return null;
+            };
 
             selectedQuestions.forEach((item, index) => {
                 const cleanQuestion = item.obj.q.replace(/<[^>]*>?/gm, '');
@@ -448,11 +481,11 @@
                     });
                 } else if (['tf','mcq'].includes(item.type)) {
                     totalObjectivePoints++;
-                    let ans = (formData.get(item.id) || "لم تُجب").trim();
+                    let ans = (getAnswer(item.id) || "لم تُجب").trim();
                     reportData += `إجابتكِ: ${ans}\n>> الإجابة النموذجية: (${item.obj.a})\n`;
                     if (ans === item.obj.a) finalScore++;
                 } else {
-                    let ans = (formData.get(item.id) || "لم تُجب").trim();
+                    let ans = (getAnswer(item.id) || "لم تُجب").trim();
                     reportData += `إجابتكِ:\n${ans}\n\n>> الإجابة النموذجية (لتقييم المعلمة):\n${item.obj.a}\n`;
                 }
                 reportData += `\n`;
@@ -460,8 +493,7 @@
 
             reportData += `------------------\nالدرجة الآلية (للأسئلة الموضوعية فقط): ${finalScore} من ${totalObjectivePoints}`;
 
-            let currentAttempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
-            localStorage.setItem(APP_COMPLETION_KEY, (currentAttempts + 1).toString());
+            safeIncrementAttempts(); // حفظ المحاولة بطريقة آمنة
 
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
@@ -470,17 +502,20 @@
             window.scrollTo(0,0);
         }
 
-        window.sendWhatsApp = () => {
+        function sendWhatsApp() {
             const text = encodeURIComponent("السلام عليكم، هذا تقرير اختبار التجويد الخاص بي:\n\n" + reportData);
-            window.open(`https://wa.me/${TEACHER_WHATSAPP}?text=${text}`, '_blank');
-        };
+            // استخدام الرابط الرسمي والأكثر توافقاً مع جميع أنواع الآيفون والأندرويد
+            window.open(`https://api.whatsapp.com/send?phone=${TEACHER_WHATSAPP}&text=${text}`, '_blank');
+        }
+        window.sendWhatsApp = sendWhatsApp;
 
-        window.sendEmail = () => {
+        function sendEmail() {
             const body = `السلام عليكم، هذا تقرير اختبار التجويد الخاص بي:\n\n${reportData}`;
             window.location.href = `mailto:${TEACHER_EMAIL}?subject=${encodeURIComponent("نتيجة اختبار التجويد: "+currentStudent)}&body=${encodeURIComponent(body)}`;
-        };
+        }
+        window.sendEmail = sendEmail;
 
-        window.copyToClipboard = () => {
+        function copyToClipboard() {
             const el = document.createElement('textarea');
             el.value = reportData; 
             document.body.appendChild(el);
@@ -489,21 +524,22 @@
             document.body.removeChild(el);
             document.getElementById('copy-status').classList.remove('hidden');
             setTimeout(() => document.getElementById('copy-status').classList.add('hidden'), 3000);
-        };
+        }
+        window.copyToClipboard = copyToClipboard;
 
-        window.exitToHome = () => {
+        function exitToHome() {
             document.getElementById('result-screen').classList.add('hidden');
-            let attempts = parseInt(localStorage.getItem(APP_COMPLETION_KEY) || "0");
-            if (attempts >= MAX_ATTEMPTS) {
+            if (safeGetAttempts() >= MAX_ATTEMPTS) {
                 showTakenScreen();
             } else {
                 document.getElementById('welcome-screen').classList.remove('hidden');
                 document.getElementById('student-name').value = '';
             }
             window.scrollTo(0,0);
-        };
+        }
+        window.exitToHome = exitToHome;
 
-        window.viewDetailsLocally = () => {
+        function viewDetailsLocally() {
             let formattedHTML = `<div class="text-center mb-6 border-b-2 border-primary pb-4">
                                     <h2 class="text-2xl font-bold text-primary mt-2">تقرير نتيجة اختبار التجويد</h2>
                                  </div>`;
@@ -532,9 +568,10 @@
             document.getElementById('details-content').innerHTML = `<div id="pdf-content" class="bg-white p-6 pb-10" dir="rtl">${formattedHTML}</div>`;
             document.getElementById('details-modal').classList.remove('hidden'); 
             document.getElementById('details-modal').classList.add('flex');
-        };
+        }
+        window.viewDetailsLocally = viewDetailsLocally;
 
-        window.exportToPDF = () => {
+        function exportToPDF() {
             const element = document.getElementById('pdf-content');
             
             const opt = {
@@ -554,9 +591,37 @@
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             });
-        };
+        }
+        window.exportToPDF = exportToPDF;
 
-        window.closeDetailsModal = () => document.getElementById('details-modal').classList.add('hidden');
+        function closeDetailsModal() {
+            document.getElementById('details-modal').classList.add('hidden');
+        }
+        window.closeDetailsModal = closeDetailsModal;
+
+        // ==========================================
+        // 💡 الميزة السرية للمعلمة: الضغط 5 مرات لفتح محاولة جديدة
+        // ==========================================
+        let secretClickCount = 0;
+        let secretClickTimer;
+        
+        document.getElementById('secret-unlock-btn').addEventListener('click', () => {
+            secretClickCount++;
+            
+            // مسح العداد إذا تأخرت في الضغط
+            clearTimeout(secretClickTimer);
+            secretClickTimer = setTimeout(() => {
+                secretClickCount = 0;
+            }, 2000); // يجب أن تكون الضغطات سريعة خلال ثانيتين
+
+            if (secretClickCount >= 5) {
+                // فتح القفل وحذف المحاولات
+                localStorage.removeItem(APP_COMPLETION_KEY);
+                alert("🔓 تم فتح محاولة جديدة للطالبة بنجاح! سيتم تحديث الصفحة الآن.");
+                window.location.reload();
+            }
+        });
+
     </script>
 </body>
 </html>
